@@ -21,10 +21,10 @@ export default class App extends Component {
   };
   onSubmit = e => {
     e.preventDefault();
-    this.setState({
-      items: this.state.items.concat(this.state.input),
+    this.setState(state => ({
+      items: state.items.concat(this.state.input),
       input: ""
-    });
+    }));
     console.log(this.state.input);
   };
   onClick = id => {};
