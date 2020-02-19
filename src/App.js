@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from "react";
 import "./App.css";
 import FontAwesome from "react-fontawesome";
@@ -11,15 +12,27 @@ export default class App extends Component {
       isEditing: false
     };
   }
-  onEditing = () => {};
-  onChange = e => {};
-  onSubmit = e => {};
+  onEditing = () => {
+    this.setState({ isEditing: true });
+  };
+  onChange = e => {
+    console.log(e.target.value);
+    this.setState({ input: e.target.value });
+  };
+  onSubmit = e => {
+    e.preventDefault();
+    this.setState({
+      items: this.state.items.concat(this.state.input),
+      input: ""
+    });
+    console.log(this.state.input);
+  };
   onClick = id => {};
   onDelete = id => {};
 
   render() {
     return (
-      <form id="todo-list">
+      <form id="todo-list" onSubmit={e => this.onSubmit(e)}>
         {this.state.items.length < 0 ? (
           <span className="todo-wrap">
             <span>
@@ -36,12 +49,19 @@ export default class App extends Component {
         ) : (
           <p></p>
         )}
-        <span className="todo-wrap">
-          <input />
-        </span>
-        <div id="add-todo">
-          <FontAwesome className="fa fa-plus" /> &nbsp; Add an Item
-        </div>
+        {this.state.isEditing ? (
+          <span className="todo-wrap">
+            <input value={this.state.input} onChange={e => this.onChange(e)} />
+          </span>
+        ) : (
+          false
+        )}
+        {/* <div id="add-todo"> */}
+        <FontAwesome name="edit" className="fa fa-plus" /> &nbsp;
+        <a id="add-todo" onClick={() => this.onEditing()}>
+          Add an Item
+        </a>
+        {/* </div> */}
       </form>
     );
   }
