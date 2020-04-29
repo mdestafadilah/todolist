@@ -22,13 +22,29 @@ export default class App extends Component {
   };
   onSubmit = (e) => {
     e.preventDefault();
+    const item = {
+      id: new Date().getTime(),
+      text: this.state.input,
+      isCompleted: false,
+    };
     this.setState((state) => ({
-      items: state.items.concat(this.state.input),
+      items: state.items.concat(item),
       input: "",
     }));
     console.log(this.state.input);
   };
-  onClick = (id) => {};
+  onClick = (id) => {
+    let updated = this.state.items.map((item) => {
+      if (item.id === id) {
+        item.isCompleted = !item.isCompleted;
+      }
+      return item;
+    });
+    this.setState({
+      items: updated,
+    });
+    console.log(updated);
+  };
   onDelete = (id) => {};
 
   render() {
@@ -38,10 +54,10 @@ export default class App extends Component {
           this.state.items.map((item, key) => {
             return (
               <span className="todo-wrap" key={key}>
-                <span>
-                  <input type="checkbox" />
+                <span onClick={() => this.onClick(item.id)}>
+                  <input type="checkbox" checked={item.isCompleted} />
                   <label htmlFor={key} className="todo">
-                    <FontAwesomeIcon icon={faCheck} /> {item}
+                    <FontAwesomeIcon icon={faCheck} /> {item.text}
                   </label>
                 </span>
 
