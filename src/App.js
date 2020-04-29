@@ -45,7 +45,14 @@ export default class App extends Component {
     });
     console.log(updated);
   };
-  onDelete = (id) => {};
+  onDelete = (id) => {
+    let filtered = this.state.items.filter((item) => {
+      if (item.id !== id) {
+        return item;
+      }
+    });
+    this.setState({ items: filtered });
+  };
 
   render() {
     return (
@@ -61,8 +68,12 @@ export default class App extends Component {
                   </label>
                 </span>
 
-                <span className="delete-item" title="remove">
-                  <FontAwesomeIcon icon={faCheck} />
+                <span
+                  className="delete-item"
+                  title="remove"
+                  onClick={() => this.onDelete(item.id)}
+                >
+                  <FontAwesomeIcon icon={faCircle} />
                 </span>
               </span>
             );
