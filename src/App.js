@@ -28,6 +28,11 @@ export default class App extends Component {
       text: this.state.input,
       isCompleted: false,
     };
+
+    if (!this.state.input.length) {
+      return false;
+    }
+
     this.setState(
       (state) => ({
         items: state.items.concat(item),
