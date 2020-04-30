@@ -11,6 +11,7 @@ export default class App extends Component {
       items: [],
       input: "",
       isEditing: false,
+      progress: 0,
     };
   }
   onEditing = () => {
@@ -27,11 +28,13 @@ export default class App extends Component {
       text: this.state.input,
       isCompleted: false,
     };
-    this.setState((state) => ({
-      items: state.items.concat(item),
-      input: "",
-    }));
-    console.log(this.state.input);
+    this.setState(
+      (state) => ({
+        items: state.items.concat(item),
+        input: "",
+      }),
+      () => this.setProgress(this.state.items)
+    );
   };
   onClick = (id) => {
     let updated = this.state.items.map((item) => {
@@ -40,10 +43,12 @@ export default class App extends Component {
       }
       return item;
     });
-    this.setState({
-      items: updated,
-    });
-    console.log(updated);
+    this.setState(
+      {
+        items: updated,
+      },
+      () => this.setProgress(updated)
+    );
   };
   onDelete = (id) => {
     let filtered = this.state.items.filter((item) => {
@@ -51,12 +56,35 @@ export default class App extends Component {
         return item;
       }
     });
-    this.setState({ items: filtered });
+    this.setState({ items: filtered }, () => this.setProgress(filtered));
+  };
+
+  setProgress = (items) => {
+    let checked = items.filter((item) => {
+      return item.isCompleted;
+    });
+
+    let progress = checked.length / items.length;
+
+    this.setState({
+      progress: Math.floor(progress * 100),
+    });
   };
 
   render() {
     return (
       <form id="todo-list" onSubmit={(e) => this.onSubmit(e)}>
+        <div className="progress">
+          <div
+            className="progress-bar"
+            role="progressbar"
+            aria-valuenow="25"
+            aria-valuemin="0"
+            style={{ width: this.state.progress + "%" }}
+          >
+            {this.state.progress + "%"}
+          </div>
+        </div>
         {this.state.items.length > 0 ? (
           this.state.items.map((item, key) => {
             return (
