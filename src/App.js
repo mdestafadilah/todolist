@@ -14,6 +14,19 @@ export default class App extends Component {
       progress: 0,
     };
   }
+
+  componentDidMount() {
+    let all =
+      localStorage.getItem("item") != null
+        ? JSON.parse(localStorage.getItem("item"))
+        : [];
+    this.setState({ items: all }, () => this.setProgress(this.state.items));
+  }
+
+  componentDidUpdate() {
+    localStorage.setItem("item", JSON.stringify(this.state.items));
+  }
+
   onEditing = () => {
     this.setState({ isEditing: true });
   };
