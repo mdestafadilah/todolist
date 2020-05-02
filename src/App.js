@@ -141,6 +141,7 @@ export default class App extends Component {
       if (item.id !== id) {
         return item;
       }
+      return false;
     });
     this.setState({ items: filtered }, () => this.setProgress(filtered));
   };
