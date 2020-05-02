@@ -4,6 +4,74 @@ import "./App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus, faCheck, faCircle } from "@fortawesome/free-solid-svg-icons";
 
+const List = (props) => {
+  const { items, onClick, onDelete } = props;
+  if (items.length > 0) {
+    let list = items.map((item, key) => {
+      return (
+        <span className="todo-wrap" key={key}>
+          <span onClick={() => onClick(item.id)}>
+            <input type="checkbox" checked={item.isCompleted} />
+            <label htmlFor={key} className="todo">
+              <FontAwesomeIcon icon={faCheck} /> {item.text}
+            </label>
+          </span>
+
+          <span
+            className="delete-item"
+            title="remove"
+            onClick={() => onDelete(item.id)}
+          >
+            <FontAwesomeIcon icon={faCircle} />
+          </span>
+        </span>
+      );
+    });
+    return list;
+  }
+  return <p>No Item in the List</p>;
+};
+
+const Input = (props) => {
+  const { isEditing, input, onChange } = props;
+  if (isEditing) {
+    return (
+      <span className="todo-wrap">
+        <input value={input} onChange={(e) => onChange(e)} />
+      </span>
+    );
+  }
+  return false;
+};
+
+const Progress = (props) => {
+  const { progress } = props;
+  return (
+    <div className="progress">
+      <div
+        className="progress-bar"
+        role="progressbar"
+        aria-valuenow="25"
+        aria-valuemin="0"
+        style={{ width: progress + "%" }}
+      >
+        {progress + "%"}
+      </div>
+    </div>
+  );
+};
+const Add = (props) => {
+  const { onEditing } = props;
+  return (
+    <div>
+      <FontAwesomeIcon icon={faPlus} /> &nbsp;
+      <a id="add-todo" onClick={() => onEditing()}>
+        Add an Item
+      </a>
+    </div>
+  );
+};
+
 export default class App extends Component {
   constructor() {
     super();
@@ -92,57 +160,10 @@ export default class App extends Component {
   render() {
     return (
       <form id="todo-list" onSubmit={(e) => this.onSubmit(e)}>
-        <div className="progress">
-          <div
-            className="progress-bar"
-            role="progressbar"
-            aria-valuenow="25"
-            aria-valuemin="0"
-            style={{ width: this.state.progress + "%" }}
-          >
-            {this.state.progress + "%"}
-          </div>
-        </div>
-        {this.state.items.length > 0 ? (
-          this.state.items.map((item, key) => {
-            return (
-              <span className="todo-wrap" key={key}>
-                <span onClick={() => this.onClick(item.id)}>
-                  <input type="checkbox" checked={item.isCompleted} />
-                  <label htmlFor={key} className="todo">
-                    <FontAwesomeIcon icon={faCheck} /> {item.text}
-                  </label>
-                </span>
-
-                <span
-                  className="delete-item"
-                  title="remove"
-                  onClick={() => this.onDelete(item.id)}
-                >
-                  <FontAwesomeIcon icon={faCircle} />
-                </span>
-              </span>
-            );
-          })
-        ) : (
-          <p></p>
-        )}
-        {this.state.isEditing ? (
-          <span className="todo-wrap">
-            <input
-              value={this.state.input}
-              onChange={(e) => this.onChange(e)}
-            />
-          </span>
-        ) : (
-          false
-        )}
-        {/* <div id="add-todo"> */}
-        <FontAwesomeIcon icon={faPlus} /> &nbsp;
-        <a id="add-todo" onClick={() => this.onEditing()}>
-          Add an Item
-        </a>
-        {/* </div> */}
+        <Progress {...this.state} />
+        <List {...this.state} onClick={this.onClick} onDelete={this.onDelete} />
+        <Input {...this.state} onChange={this.onChange} />
+        <Add onEditing={this.onEditing} />
       </form>
     );
   }
