@@ -2,7 +2,7 @@
 import React, { Component } from "react";
 import "./App.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus, faCheck, faCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faCheck, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const List = (props) => {
   const { items, onClick, onDelete } = props;
@@ -22,7 +22,7 @@ const List = (props) => {
             title="remove"
             onClick={() => onDelete(item.id)}
           >
-            <FontAwesomeIcon icon={faCircle} />
+            <FontAwesomeIcon icon={faTrash} />
           </span>
         </span>
       );
