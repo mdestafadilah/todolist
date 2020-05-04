@@ -11,7 +11,7 @@ const List = (props) => {
       return (
         <span className="todo-wrap" key={key}>
           <span onClick={() => onClick(item.id)}>
-            <input type="checkbox" defaultChecked={item.isCompleted} />
+            <input type="checkbox" checked={item.isCompleted} />
             <label htmlFor={key} className="todo">
               <FontAwesomeIcon icon={faCheck} /> {item.text}
             </label>
